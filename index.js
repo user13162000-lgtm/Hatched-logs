@@ -3,14 +3,16 @@ const axios = require('axios');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Parse JSON payloads
 app.use(express.json());
 
-// Your Discord webhook URL (create one in a channel)
-const DISCORD_WEBHOOK = process.env.DISCORD_WEBHOOK; 
+const DISCORD_WEBHOOK = process.env.DISCORD_WEBHOOK;
+
+app.get('/', (req, res) => {
+  res.send('Hatched logs service is running!');
+});
 
 app.post('/hatch', async (req, res) => {
-  const { user, item } = req.body; // Example payload
+  const { user, item } = req.body;
 
   if (!user || !item) {
     return res.status(400).send('Missing user or item in payload');
@@ -22,15 +24,10 @@ app.post('/hatch', async (req, res) => {
     });
     res.send('Ping sent!');
   } catch (err) {
-    console.error(err);
     res.status(500).send('Failed to send ping');
   }
 });
 
-app.get('/', (req, res) => {
-  res.send('Hatched-logs service is online!');
-});
-
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Server listening on port ${PORT}`);
 });
